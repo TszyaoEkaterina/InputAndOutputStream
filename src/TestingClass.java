@@ -3,9 +3,9 @@ import java.io.File;
 public class TestingClass {
     public static void main(String[] args) {
         File file = new File("basket.txt");
-        Basket basket = new Basket(new String[]{}, new int[]{});
+        Basket basket;
         if (file.exists()) {
-            basket = basket.loadFromTxtFile(file);
+            basket = Basket.loadFromTxtFile(file);
         } else {
             basket = new Basket(new String[]{"milk", "chocolate", "cake"}, new int[]{5, 10, 12});
         }
@@ -13,8 +13,8 @@ public class TestingClass {
         basket.addToCart(2, 1);
         basket.printCart();
 
-        basket.saveTxt(file);
         basket.addToCart(3, 3);
-        basket = basket.loadFromTxtFile(file);
+        Basket basket2 = Basket.loadFromTxtFile(file);
+        basket2.printCart();
     }
 }

@@ -4,6 +4,7 @@ public class Basket {
     String[] products;
     int[] prices;
     int[] amounts;
+    File file = new File("basket.txt");
 
 
     public Basket(String[] products, int[] prices) {
@@ -13,7 +14,7 @@ public class Basket {
         for (int i = 0; i < products.length; i++) {
             amounts[i] = 0;
         }
-        //loadFromTxtFile(new File("basket.txt"));
+        saveTxt(file);
     }
 
     private Basket(String[] products, int[] prices, int[] amounts) {
@@ -24,7 +25,7 @@ public class Basket {
 
     public void addToCart(int productNum, int amount) {
         amounts[productNum - 1] += amount;
-        saveTxt(new File("basket.txt"));
+        saveTxt(file);
     }
 
     public void printCart() {
@@ -43,7 +44,7 @@ public class Basket {
     }
 
     public void saveTxt(File textFile) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("basket.txt", false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             if (!textFile.exists()) {
                 textFile.createNewFile();
             }
@@ -76,10 +77,6 @@ public class Basket {
             for (int i = 0; i < loadedAmountsString.length; i++) {
                 loadedAmounts[i] = Integer.parseInt(loadedAmountsString[i]);
             }
-//            while ((line = reader.readLine()) != null) {
-//                String[] parts = line.split(" ");
-//                System.out.println(parts);
-//            }
             return new Basket(loadedProducts,loadedPrices,loadedAmounts);
         } catch (IOException e) {
             System.out.println(e.getMessage());
