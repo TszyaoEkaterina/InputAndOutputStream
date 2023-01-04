@@ -16,5 +16,12 @@ public class TestingClass {
         basket.addToCart(3, 3);
         Basket basket2 = Basket.loadFromTxtFile(file);
         basket2.printCart();
+
+        //Задача 2
+        File binFile = new File("binBasket.txt");
+        basket2.saveBin(binFile);
+        Basket basket3 = Basket.loadFromBinFile(binFile);
+        System.out.println("\n(basket from bin file)");
+        basket3.printCart();
     }
 }
