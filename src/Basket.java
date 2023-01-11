@@ -17,10 +17,13 @@ public class Basket implements Serializable {
         saveTxt(file);
     }
 
-    private Basket(String[] products, int[] prices, int[] amounts) {
+    public Basket(String[] products, int[] prices, int[] amounts) {
         this.products = products;
         this.prices = prices;
         this.amounts = amounts;
+    }
+
+    public Basket() {
     }
 
     public void addToCart(int productNum, int amount) {
@@ -45,9 +48,6 @@ public class Basket implements Serializable {
 
     public void saveTxt(File textFile) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
-            if (!textFile.exists()) {
-                textFile.createNewFile();
-            }
             for (String product : products) {
                 writer.write(product + " ");
             }
@@ -101,5 +101,15 @@ public class Basket implements Serializable {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public void setProductsAndPrices(String[] products,int[] prices) {
+        this.products = products;
+        this.prices = prices;
+        amounts = new int[products.length];
+        for (int i = 0; i < products.length; i++) {
+            amounts[i] = 0;
+        }
+        saveTxt(file);
     }
 }
