@@ -1,11 +1,16 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
+import java.util.Scanner;
 
 public class Basket implements Serializable {
     String[] products;
     int[] prices;
     int[] amounts;
-    File file = new File("basket.txt");
+    File txtFile = new File("basket.txt");
 
+    ClientLog log = new ClientLog();
 
     public Basket(String[] products, int[] prices) {
         this.products = products;
@@ -14,7 +19,7 @@ public class Basket implements Serializable {
         for (int i = 0; i < products.length; i++) {
             amounts[i] = 0;
         }
-        saveTxt(file);
+        saveTxt(txtFile);
     }
 
     public Basket(String[] products, int[] prices, int[] amounts) {
@@ -27,8 +32,9 @@ public class Basket implements Serializable {
     }
 
     public void addToCart(int productNum, int amount) {
+        log.log(productNum, amount);
         amounts[productNum - 1] += amount;
-        saveTxt(file);
+        saveTxt(txtFile);
     }
 
     public void printCart() {
@@ -47,7 +53,7 @@ public class Basket implements Serializable {
     }
 
     public void saveTxt(File textFile) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, false))) {
             for (String product : products) {
                 writer.write(product + " ");
             }
@@ -103,13 +109,36 @@ public class Basket implements Serializable {
         }
     }
 
-    public void setProductsAndPrices(String[] products,int[] prices) {
+    public void setProductsAndPrices(String[] products, int[] prices) {
         this.products = products;
         this.prices = prices;
         amounts = new int[products.length];
         for (int i = 0; i < products.length; i++) {
             amounts[i] = 0;
         }
-        saveTxt(file);
+        saveTxt(txtFile);
+    }
+
+    public void saveJson(File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            String json = gson.toJson(this);
+            writer.write(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Basket loadFromJson(File file) {
+        try (Scanner scanner = new Scanner(file)) {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            String jsonStr = scanner.nextLine();
+            return gson.fromJson(jsonStr, Basket.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
