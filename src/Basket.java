@@ -5,12 +5,10 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Basket implements Serializable {
-    String[] products;
-    int[] prices;
-    int[] amounts;
-    File txtFile = new File("basket.txt");
+    private String[] products;
+    private int[] prices;
+    private int[] amounts;
 
-    ClientLog log = new ClientLog();
 
     public Basket(String[] products, int[] prices) {
         this.products = products;
@@ -19,7 +17,8 @@ public class Basket implements Serializable {
         for (int i = 0; i < products.length; i++) {
             amounts[i] = 0;
         }
-        saveTxt(txtFile);
+//        saveTxt(txtFile);
+        Main.saveConfig(this);
     }
 
     public Basket(String[] products, int[] prices, int[] amounts) {
@@ -32,12 +31,18 @@ public class Basket implements Serializable {
     }
 
     public void addToCart(int productNum, int amount) {
-        log.log(productNum, amount);
+//        log.log(productNum, amount);
+        Main.logConfig(productNum, amount);
         amounts[productNum - 1] += amount;
-        saveTxt(txtFile);
+//        saveTxt(txtFile);
+        Main.saveConfig(this);
     }
 
     public void printCart() {
+        if (products == null || prices == null) {
+            System.out.println("Ничего не загружено. Корзина пуста.");
+            return;
+        }
         System.out.println("Ваша корзина:");
         int sum = 0;
         for (int i = 0; i < products.length; i++) {
@@ -116,11 +121,12 @@ public class Basket implements Serializable {
         for (int i = 0; i < products.length; i++) {
             amounts[i] = 0;
         }
-        saveTxt(txtFile);
+//        saveTxt(txtFile);
+        Main.saveConfig(this);
     }
 
     public void saveJson(File file) {
-        try (FileWriter writer = new FileWriter(file)) {
+        try (FileWriter writer = new FileWriter(file, false)) {
             GsonBuilder builder = new GsonBuilder();
             Gson gson = builder.create();
             String json = gson.toJson(this);

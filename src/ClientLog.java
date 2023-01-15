@@ -4,8 +4,8 @@ import java.io.*;
 
 public class ClientLog {
 
-    public void log(int productNum, int amount) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter("log.csv", true))) {
+    public void log(int productNum, int amount, String logFileName) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(logFileName, true))) {
             writer.writeNext(new String[]{String.valueOf(productNum), String.valueOf(amount)});
             writer.flush();
         } catch (IOException e) {
@@ -13,8 +13,8 @@ public class ClientLog {
         }
     }
 
-    public void exportAsCSV(File txtFile) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter("log.csv", true));
+    public void exportAsCSV(File txtFile, String logFileName) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(logFileName, true));
              BufferedReader reader = new BufferedReader(new FileReader(txtFile))) {
             for (int i = 0; i < 3; i++) {
                 String line = reader.readLine();
