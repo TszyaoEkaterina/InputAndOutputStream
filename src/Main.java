@@ -18,6 +18,7 @@ public class Main {
         basket.addToCart(1, 2);
         basket.addToCart(2, 1);
         basket.addToCart(3, 3);
+        logConfig();
         basket.printCart();
 
         Basket basket2 = createBasket(file);
@@ -87,7 +88,7 @@ public class Main {
             if (save) {
                 switch (saveFormat) {
                     case "json":
-                        basket.saveJson(saveFile);//TODO
+                        basket.saveJson(saveFile);
                         break;
                     case "txt":
                         basket.saveTxt(saveFile);
@@ -99,7 +100,7 @@ public class Main {
         }
     }
 
-    public static void logConfig(int productNum, int amount) {
+    public static void logConfig() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -108,7 +109,7 @@ public class Main {
             boolean doLog = Boolean.parseBoolean(xPath
                     .compile("/config/log/enabled").evaluate(doc));
             if (doLog) {
-                log.log(productNum, amount, logFileName);
+                log.exportAsCSV(new File(logFileName));
             }
         } catch (Exception e) {
             e.printStackTrace();

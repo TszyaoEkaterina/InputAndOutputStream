@@ -31,8 +31,7 @@ public class Basket implements Serializable {
     }
 
     public void addToCart(int productNum, int amount) {
-//        log.log(productNum, amount);
-        Main.logConfig(productNum, amount);
+        Main.log.log(productNum, amount);
         amounts[productNum - 1] += amount;
 //        saveTxt(txtFile);
         Main.saveConfig(this);

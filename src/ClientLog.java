@@ -1,24 +1,24 @@
 import au.com.bytecode.opencsv.CSVWriter;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientLog {
+    private List logList = new ArrayList<Integer>();
 
-    public void log(int productNum, int amount, String logFileName) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(logFileName, true))) {
-            writer.writeNext(new String[]{String.valueOf(productNum), String.valueOf(amount)});
-            writer.flush();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public void log(int productNum, int amount/*, String logFileName*/) {
+        logList.add(productNum);
+        logList.add(amount);
     }
 
-    public void exportAsCSV(File txtFile, String logFileName) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(logFileName, true));
-             BufferedReader reader = new BufferedReader(new FileReader(txtFile))) {
-            for (int i = 0; i < 3; i++) {
-                String line = reader.readLine();
-                writer.writeNext(line.split(" "));
+    public void exportAsCSV(File file) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(file, true))) {
+            file.createNewFile();
+            for (int i = 0; i < logList.size(); i = i + 2) {
+                writer.writeNext(new String[]{String.valueOf(logList.get(i)),
+                        String.valueOf(logList.get(i + 1))});
+                writer.flush();
             }
             writer.flush();
         } catch (IOException e) {
